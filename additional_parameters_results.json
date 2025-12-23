@@ -1,0 +1,11 @@
+[
+  {
+    "response": "The `top_p` parameter, also known as nucleus sampling, is used in language models to control the diversity of generated text. It works by selecting tokens from the smallest possible set whose cumulative probability exceeds a threshold `p`. Instead of considering only the top-ranked tokens (as in top-k sampling), `top_p` dynamically includes tokens based on their probability distribution. A lower `p` value results in more focused and deterministic outputs, while a higher `p` allows for more diverse and creative responses."
+  },
+  {
+    "response": "The `top_p` parameter, also known as nucleus sampling, controls the probability mass of the tokens considered during text generation. It determines the smallest set of tokens whose cumulative probability is at least `p`. For instance, with `top_p=0.9`, the model selects tokens from the top 90% of the probability distribution, ensuring diversity while filtering out unlikely tokens. Lower values make the output more focused, while higher values increase randomness."
+  },
+  {
+    "response": "The `top_p` parameter, also known as nucleus sampling, controls the cumulative probability of tokens considered during text generation by a language model (LLM). Instead of selecting from the top-k tokens, it dynamically includes the smallest set of tokens whose probabilities sum to at least `p`. This ensures more coherent and contextually relevant outputs by focusing on high-probability tokens while retaining variability. A lower `top_p` makes the output more deterministic, while a higher `top_p` increases diversity."
+  }
+]

@@ -1,21 +1,37 @@
-from task.app.main import run
+from task.app.client import DialClient
+from task.constants import DEFAULT_MODEL, DEFAULT_SYSTEM_PROMPT, DIAL_ENDPOINT
+from task.models.conversation import Conversation
+from task.models.message import Message
+from task.models.role import Role
 
-# TODO:
-#  Try the `seed` parameter:
-#       It allows us to reduce entropy by making the model's output more deterministic.
-#       There's no universally "best" seed - any integer works fine. Common approaches:
-#            - For testing: Use simple values like 42, 123, or 1000
-#       Default: None or random unless specified on the LLM side
-#  User massage: Name a random animal
+def run(
+        deployment_name: str,
+        print_request: bool = True,
+        print_only_content: bool = False,
+        **kwargs
+) -> None:
+    client = DialClient(
+        endpoint=DIAL_ENDPOINT,
+        deployment_name=deployment_name,
+    )
+    conversation = Conversation()
+    conversation.add_message(Message(Role.SYSTEM, DEFAULT_SYSTEM_PROMPT))
+    conversation.add_message(Message(Role.USER, "Name a random animal"))
 
-run(
-    deployment_name='gpt-4o',
-    # TODO:
-    #  1. Use `seed` parameter with value 42 (or whatever you want)
-    #  2. Use `n` parameter with value 5
-)
+    return client.get_completion(
+        messages=conversation.get_messages(),
+        print_request=print_request,
+        print_only_content=print_only_content,
+        **kwargs
+    )
 
-# Check the content in choices. The expected result is that in almost all choices the result will be the same.
-# If you restart the app and retry, it should be mostly the same.
-# Also, try it without `seed` parameter.
-# For Anthropic and Gemini this parameter will be ignored
+if __name__ == "__main__":
+    try:
+        response=run(
+            deployment_name=DEFAULT_MODEL,
+            seed=42,
+        )
+        print(f"    Response: {response.content}")
+    except Exception as e:
+        print(f"Error during execution: {str(e)}")
+        raise e

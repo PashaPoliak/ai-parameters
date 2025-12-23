@@ -23,6 +23,23 @@ By completing these tasks, you will learn:
    pip install -r requirements.txt
    ```
 
+```   
+py -m task.1-task-models
+py -m task.2-task-n
+py -m task.3-task-temperature
+py -m task.4-task-seed
+py -m task.5-task-max_tokens
+py -m task.6-task-frequency_penalty
+py -m task.7-task-presence_penalty
+py -m task.8-task-stop
+py -m task.9-task-additional-parameters
+python -m pytest ./test/ -v
+python -m pytest ./test/test_params.py -v
+```
+
+# <img src="image.png">
+
+
 2. **Set your API key:**
     - Ensure that you connected to the EPAM VPN
     - Get the DIAL API key here: https://support.epam.com/ess?id=sc_cat_item&table=sc_cat_item&sys_id=910603f1c3789e907509583bb001310c
@@ -38,14 +55,14 @@ By completing these tasks, you will learn:
    ├── app/
    │   ├── main.py                  ✅ Complete
    │   └── client.py                ✅ Complete
-   ├── 1-task-models.py             🚧 TODO
-   ├── 2-task-n.py                  🚧 TODO
-   ├── 3-task-temperature.py        🚧 TODO
-   ├── 4-task-seed.py               🚧 TODO
-   ├── 5-task-max_tokens.py         🚧 TODO
-   ├── 6-task-frequency_penalty.py  🚧 TODO
-   ├── 7-task-presence_penalty.py   🚧 TODO
-   └── 8-task-stop.py               🚧 TODO
+   ├── 1_task_models.py             ✅ Complete
+   ├── 2-task-n.py                  ✅ Complete
+   ├── 3-task-temperature.py        ✅ Complete
+   ├── 4-task-seed.py               ✅ Complete
+   ├── 5-task-max_tokens.py         ✅ Complete
+   ├── 6-task-frequency_penalty.py  ✅ Complete
+   ├── 7-task-presence_penalty.py   ✅ Complete
+   └── 8-task-stop.py               ✅ Complete
    ```
    
 ## Available models:
@@ -63,8 +80,8 @@ By completing these tasks, you will learn:
 ## 📝 Your Tasks
 
 Implement all tasks from these files:
-- 1-task-models.py 
-- 2-task-n.py 
+- 1_task_models.py
+- 2-task-n.py
 - 3-task-temperature.py 
 - 4-task-seed.py     
 - 5-task-max_tokens.py   

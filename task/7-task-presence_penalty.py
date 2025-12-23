@@ -1,20 +1,37 @@
-from task.app.main import run
+from task.app.client import DialClient
+from task.constants import DEFAULT_MODEL, DEFAULT_SYSTEM_PROMPT, DIAL_ENDPOINT
+from task.models.conversation import Conversation
+from task.models.message import Message
+from task.models.role import Role
 
-# TODO:
-#  Try `presence_penalty` parameter.
-#  Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's
-#  likelihood to talk about new topics. Higher values == more topic diversity.
-#       Range: -2.0 to 2.0
-#       Default: 0.0
-#  User massage: What is an entropy in LLM's responses?
+USER_MESSAGE = "What is an entropy in LLM's responses?"
 
-run(
-    deployment_name='gpt-4o',
-    print_only_content=True,
-    # TODO:
-    #  Use `presence_penalty` parameter with different range (-2.0 to 2.0)
-)
+def run(
+        deployment_name: str,
+        print_request: bool = True,
+        print_only_content: bool = False,
+        **kwargs
+) -> None:
+    client = DialClient(
+        endpoint=DIAL_ENDPOINT,
+        deployment_name=deployment_name,
+    )
+    conversation = Conversation()
+    conversation.add_message(Message(Role.SYSTEM, DEFAULT_SYSTEM_PROMPT))
+    conversation.add_message(Message(Role.USER, USER_MESSAGE))
 
-# In the final result, we can see that the higher `presence_penalty` (2.0) the more LLM is trying to add topics that
-# somehow related to the main topic.
-# For Anthropic and Gemini this parameter will be ignored
+    return client.get_completion(
+        messages=conversation.get_messages(),
+        print_request=print_request,
+        print_only_content=print_only_content,
+        **kwargs
+    )
+
+if __name__ == "__main__":
+    response = run(
+        deployment_name=DEFAULT_MODEL,
+        print_request=False,
+        print_only_content=True,
+        presence_penalty=0.0
+        )
+    print(f"Response: {response.content}")

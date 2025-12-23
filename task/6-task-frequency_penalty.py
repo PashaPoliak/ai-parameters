@@ -1,21 +1,45 @@
-from task.app.main import run
+from task.app.client import DialClient
+from task.constants import DEFAULT_MODEL, DEFAULT_SYSTEM_PROMPT, DIAL_ENDPOINT
+from task.models.conversation import Conversation
+from task.models.message import Message
+from task.models.role import Role
 
-# TODO:
-#  Try `frequency_penalty` parameter.
-#  Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's
-#  likelihood to repeat the same line verbatim. Higher values == less repetitive text.
-#       Range: -2.0 to 2.0
-#       Default: 0.0
-#  User massage: Explain the water cycle in simple terms for children
+USER_MESSAGE = "Explain the water cycle in simple terms for children"
 
-run(
-    deployment_name='gpt-4o',
-    print_only_content=True,
-    # TODO:
-    #  Use `frequency_penalty` parameter with different range (-2.0 to 2.0).
-)
+def run(
+        deployment_name: str,
+        print_request: bool = True,
+        print_only_content: bool = False,
+        user_message: str = None,
+        **kwargs
+) -> dict:
+    client = DialClient(
+        endpoint=DIAL_ENDPOINT,
+        deployment_name=deployment_name,
+    )
+    conversation = Conversation()
+    conversation.add_message(Message(Role.SYSTEM, DEFAULT_SYSTEM_PROMPT))
+    conversation.add_message(Message(Role.USER, user_message or USER_MESSAGE))
 
-# Pay attention that when we set for `gpt-4o` frequency_penalty as -2.0 - the request is running too long,
-# and in the result we can get something strange (such as repetitive words in the end).
-# Copy the results and then check with separate request and ask LLM where is more repetitive blocks in texts.
-# For Anthropic and Gemini this parameter will be ignored
+    ai_message = client.get_completion(
+        messages=conversation.get_messages(),
+        print_request=print_request,
+        print_only_content=print_only_content,
+        **kwargs
+    )
+    
+    return {
+        "model": deployment_name,
+        "content": ai_message.content,
+        "frequency_penalty": kwargs.get("frequency_penalty")
+    }
+
+if __name__ == "__main__":
+    response = run(
+        deployment_name=DEFAULT_MODEL,
+        user_message=USER_MESSAGE,
+        print_request=False,
+        print_only_content=True,
+        frequency_penalty=0.0
+        )
+    print(f"Response: {response['content']}")
